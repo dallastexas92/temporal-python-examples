@@ -7,12 +7,12 @@ async def extract_data() -> str:
 
 #TRANSFORM ACTIVITY
 @activity.defn
-async def transform_data(fail_first_attempt: bool) -> str:
-    if fail_first_attempt:
-        raise Exception("Transform step failed on 1st attempt!")
+async def transform_data() -> str:
     return "I'm the transform step!"
 
 #LOAD ACTIVITY
 @activity.defn
-async def load_data() -> str:
-    return "I'm the load step!"
+async def load_data(max_failures: int, current_attempt: int) -> str:
+    if current_attempt <= max_failures:
+        raise Exception(f"Load step failed on attempt {current_attempt}!")
+    return f"I'm the load step! I completed after {current_attempt} attempt(s)"
